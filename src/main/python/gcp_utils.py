@@ -1,4 +1,4 @@
-from google.cloud import storage, secretmanager
+from google.cloud import storage, bigquery, secretmanager
 from logging_utils import LoggingUtils
 
 log = LoggingUtils.config_logger(__name__)
@@ -38,3 +38,27 @@ def access_secret(project_id, secret_id, version_id="latest"):
     name = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
     response = client.access_secret_version(request={"name": name})
     return response.payload.data.decode("UTF-8")
+
+
+def load_to_bigquery_from_cloud_storage(bucket_name, filename, table_id, schema_nasa_bigquery):
+    log.info(f"loading {filename} from {bucket_name} to bigquery")
+
+    client = bigquery.Client()
+
+    job_config = bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.CSV,
+        schema=schema_nasa_bigquery,
+        skip_leading_rows=1,
+        autodetect=True,
+        ignore_unknown_values=True,
+    )
+
+    gcs_uri = f"gs://{bucket_name}/{filename}"
+
+    load_job = client.load_table_from_uri(
+        gcs_uri, table_id, job_config=job_config
+    )
+
+    load_job.result()  # waits for the load job to finish
+    destination_table = client.get_table(table_id)
+    log.info(f"asteroids data uploaded to bigquery {destination_table}")
