@@ -22,6 +22,7 @@ schema_nasa_asteroid_data = [
 
 
 class GCPConfig:
+    gcp_dataset_path = os.getenv("NASA_DATASET_PATH")
     gcp_project_id = "de-ru-data-engineering"
     gcp_secret_id = "nasa-api-key"
     gcp_bucket_name = "de-bu-nasa-asteroids"
