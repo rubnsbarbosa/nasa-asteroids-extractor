@@ -1,0 +1,40 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools >= 61.0"]
+
+[project]
+name = "nasa-asteroids-extractor"
+version = "1.0.0"
+description = "ETL asteroids data using some Google Cloud services"
+readme = "README.md"
+requires-python = ">= 3.8,<4.0"
+license = { file = "LICENSE" }
+authors = [
+    {name = "rubnsbarbosa", email="rubnsbarbosa@gmail.com"}
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+
+    # Specify the Python versions you support here.
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+extend-exclude = [
+    "*.pyc",
+    "__pycache__",
+]
+
+[tool.ruff.lint]
+select = ["Q"]
